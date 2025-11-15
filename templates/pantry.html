@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <div class="panel-header">
+        <h1>Pantry</h1>
+        <p>Track what you have and when it expires.</p>
+    </div>
+    <div class="panel-body grid">
+        <div class="card">
+            <h2>Add Ingredient</h2>
+            <form method="post" action="{{url_for('pantry')}}" class="form">
+               <label>
+                Name
+                <input name="name" required placeholder="Chicken Breast, Rice, Eggs">
+               </label>
+               <div class="row">
+                    <label>
+                        Quantity
+                        <input name="quantity" placeholder="2, 1.5, dozen">
+                    </label>
+                    <label>
+                        Unit
+                        <input name="unit" placeholder="lbs, cups, pack">
+                    </label>
+               </div> 
+               <label>
+                Expiration Date
+                <input type="date" name="expires_on">
+               </label>
+               <button type="submit" class="btn primary">Add to Pantry</button>
+            </form>
+        </div>
+        <div class="card">
+            <h2>Items</h2>
+            {% if items %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Expires</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>
+                            {% if item.quantity %}{{ item.quantity }}{% endif %}
+                            {% if item.unit %}{{ item.unit }}{% endif %}
+                        </td>
+                        <td>
+                            {% if item.expires_on %}
+                                {{ item.expires_on.strftime("%Y-%m-%d") }}
+                            {% else %}
+                                - 
+                            {% endif %}
+                        </td>
+                        <td class="right">
+                            <form method="post" action="{{url_for('delete_item', item_id=item.id)}}">
+                                <button class="btn ghost" type="submit">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="empty">No items yet. Add something on the left.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
