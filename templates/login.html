@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <div class="panel-header">
+        <h1>Welcome to MealSmith</h1>
+        <p>A smart AI-Powered Recipie Generator and Pantry Tracker that keeps track of your grocries, when they expired, and which ones you are out of.</p>
+    </div>
+    <div class="panel-header">
+        <h1>Log In</h1>
+        <p>Sign in to see your pantry and saved ideas.</p>
+    </div>
+    <div class="panel-body grid">
+        <div class="card">
+            <form method="post" action="{{url_for('login')}}" class="form">
+                {% if error %}
+                <p class="error">{{ error }}</p>
+                {% endif %}
+                <label>
+                    Username
+                    <input name="username" required>
+                </label>
+                <label>
+                    Password
+                    <input type="password" name="password" required>
+                </label>
+                <button type="submit" class="btn primary">Log In</button>
+            </form>
+            <p class="small">
+                Don't have an account?
+                <a href="{{url_for('register')}}">Create One</a>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

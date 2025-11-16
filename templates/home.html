@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <div class="panel-header">
+        <h1>Welcome to MealSmith</h1>
+        <p>Plan smarter meals, waste less food, and keep your pantry under control.</p>
+    </div>
+    <div class="panel-body grid">
+        <div class="card">
+            <h2>Pantry</h2>
+            <p>See what you have on hand and track expiration dates.</p>
+            <a href="{{url_for('pantry')}}" class="btn primary">Go to Pantry</a>
+        </div>
+        <div class="card">
+            <h2>MealSmith</h2>
+            <p>Use what you have to discover recipes that fit your pantry</p>
+            <a href="#" class="btn ghost">Coming soon!</a>
+        </div>
+        <div class="card">
+            <h2>Shopping List</h2>
+            <p>Turn your missing ingredients into a clean shopping list to send to yourself!</p>
+            <a href="#" class="btn ghost">Coming soon!</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
