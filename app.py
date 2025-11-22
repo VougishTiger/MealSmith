@@ -113,10 +113,53 @@ def register():
                 return redirect(url_for("home"))
     return render_template("register.html", error=error)
 
+@app.route("/recipes", methods=["GET", "POST"])
+def recipes():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    items= Ingredient.query.filter_by(user_id=session["user_id"]).order_by(Ingredient.expires_on.is_(None), Ingredient.expires_on).all()
+    recipe= None
+    if request.method== "POST":
+        notes= request.form.get("notes", "").strip()
+        recipe= generate_recipe(items, notes)
+    return render_template("recipes.html", items=items, recipe=recipe)
+
 @app.route("/logout")
 def logout():
     session.pop("user_id", None)
     return redirect(url_for("login"))
+
+def generate_recipe(items, notes):
+    names=[i.name for i in items if i.name]
+    base_title= "Pantry Recipe"
+    if names:
+        main= names[0]
+        base_title= f"Easy {main} skillet"
+    ingredients= []
+    for i in items[:8]:
+        line= i.name
+        if i.quantity: 
+            line+= f" {i.quantity}"
+        if i.unit:
+            line+= f" {i.unit}"
+        ingredients.append(line)
+    if not ingredients:
+        ingredients= ["Pick any 3 ingredients you have on hand"]
+    steps= []
+    if notes:
+        steps.append(f"Keep in mind: {notes}")
+    steps.extend([
+        "Gather all listed ingredients and preheat your pan or oven if needed.",
+        "Prep ingredients: chop vegetables, trim proteins, and measure seasonings.",
+        "Cook your main ingredient first, then add supporting ingredients in layers.",
+        "Taste as you go and adjust salt, pepper, and spices.",
+        "Plate the dish, add any fresh toppings, and serve warm."
+    ])
+    return {
+        "title": base_title,
+        "description": "A quick idea built from what you already have in your pantry.",
+        "ingredients": ingredients,
+        "steps": steps}
 
 if __name__=="__main__":
     app.run(debug=True)

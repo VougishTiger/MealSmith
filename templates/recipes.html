@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <div class="panel-header">
+        <h1>MealBot</h1>
+        <p>Let this chef-bot turn your pantry into dinner ideas.</p>
+    </div>
+    <div class="panel-body grid">
+        <div class="card">
+            <h2>Recipe Generator</h2>
+            <form method="post" action="{{url_for('recipes')}}" class="form">
+                <p class="small">We will use your current pantry plus anything you write here.</p>
+                <label>
+                    Cravings, diet, or notes
+                    <textarea name="notes" rows="4" placeholder="Quick dinner, high protein, no dairy, love spicy food"></textarea>
+                </label>
+                <button type="submit" class="btn primary">Generate Recipe</button>
+            </form>
+            {% if items %}
+            <div class="chip-list">
+                <p class="small">In your pantry now:</p>
+                <div class="chips">
+                    {% for item in items %}
+                    <span class="chip">
+                        {{ item.name }}
+                        {% if item.quantity %} · {{ item.quantity }}{% endif %}
+                        {% if item.unit %} {{ item.unit }}{% endif %}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="card">
+            <h2>Recipe</h2>
+            {% if recipe %}
+                <h3>{{ recipe.title }}</h3>
+                {% if recipe.description %}
+                <p class="muted">{{ recipe.description }}</p>
+                {% endif %}
+                <h4>Ingredients</h4>
+                <ul class="list">
+                    {% for line in recipe.ingredients %}
+                    <li>{{ line }}</li>
+                    {% endfor %}
+                </ul>
+                <h4>Steps</h4>
+                <ol class="list">
+                    {% for step in recipe.steps %}
+                    <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+                {% else %}
+                    <p class="empty">Hit "Generate Recipe" to get a recipe idea based on your products in your pantry!</p>
+                {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
