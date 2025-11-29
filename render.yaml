@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: mealsmith
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        value: "6d8c3ac4ff7f1ac9b9c45e174a2fb0d65f298c0e33a7e587cdb4e8c1748c9aab"
+      - key: DATABASE_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
