@@ -11,7 +11,9 @@ app.config["SECRET_KEY"]= os.getenv("SECRET_KEY","6d8c3ac4ff7f1ac9b9c45e174a2fb0
 database_url= os.getenv("DATABASE_URL","")
 if database_url:
     if database_url.startswith("postgres://"):
-        database_url= database_url.replace("postgres://","postgresql://",1)
+        database_url= database_url.replace("postgres://","postgresql+psycopg://",1)
+    elif database_url.startswith("postgresql://"):
+        database_url= database_url.replace("postgresql://","postgresql+psycopg://",1)
     app.config["SQLALCHEMY_DATABASE_URI"]= database_url
 else:
     base_dir= os.path.abspath(os.path.dirname(__file__))
